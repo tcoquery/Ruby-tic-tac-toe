@@ -22,6 +22,7 @@ class Game
     @win1 = ["X", "X", "X"]
     @win2 = ["O", "O", "O"]
     @winner = ""
+    @draw = false
     @game_over = false
     play
   end
@@ -32,10 +33,13 @@ private
       clear
       show_board
       check_winner
-    unless @game_over 
-      player_input
-    else
+      draw
+    if @game_over 
       puts "\n Congratulations the winner is #{@winner}"
+    elsif @draw
+      puts "\n It's a tie"
+    else
+      player_input
     end
   end
 
@@ -43,7 +47,7 @@ private
     if @round.odd? 
       puts "\n #{@player_one.name}, please choose an available position on the board to place your marker"
       @player_one_input=gets.chomp
-        if @player_one_input.match?(/[1-9]/)
+        if @player_one_input.match?(/[1-9]/) && @player_one_input.size == 1
           update_board(@player_one_input.to_i)
           update_winning_positions(@player_one_input.to_i, @player_one.marker)
           play
@@ -53,7 +57,7 @@ private
     else
       puts "\n #{@player_two.name}, please choose an available position on the board to place your marker"
       @player_two_input=gets.chomp
-        if @player_two_input.match?(/[1-9]/)
+        if @player_two_input.match?(/[1-9]/) && @player_two_input.size == 1
           update_board(@player_two_input.to_i)
           update_winning_positions(@player_two_input.to_i, @player_two.marker)
           play
@@ -106,6 +110,12 @@ private
         @winner = @player_two.name
         @game_over = true
       end
+    end
+  end
+
+  def draw
+    if @board.all? {|element| element.match?(/[XO]/)}
+      @draw = true
     end
   end
 
