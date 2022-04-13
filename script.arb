@@ -47,7 +47,7 @@ private
     if @round.odd? 
       puts "\n #{@player_one.name}, please choose an available position on the board to place your marker"
       @player_one_input=gets.chomp
-        if @player_one_input.match?(/[1-9]/) && @player_one_input.size == 1
+        if @player_one_input.match?(/^[1-9]$/) 
           update_board(@player_one_input.to_i)
           update_winning_positions(@player_one_input.to_i, @player_one.marker)
           play
@@ -57,7 +57,7 @@ private
     else
       puts "\n #{@player_two.name}, please choose an available position on the board to place your marker"
       @player_two_input=gets.chomp
-        if @player_two_input.match?(/[1-9]/) && @player_two_input.size == 1
+        if @player_two_input.match?(/^[1-9]$/) 
           update_board(@player_two_input.to_i)
           update_winning_positions(@player_two_input.to_i, @player_two.marker)
           play
