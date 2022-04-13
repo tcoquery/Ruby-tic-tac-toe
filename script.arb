@@ -18,9 +18,10 @@ class Game
     @player_two=player_two
     @round = 1
     @board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    @winning_board = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [7,5,3]]
+    @winning_combinations = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [7,5,3]]
     @win1 = ["X", "X", "X"]
     @win2 = ["O", "O", "O"]
+    @winner = ""
     @game_over = false
     play
   end
@@ -30,8 +31,11 @@ private
   def play
       clear
       show_board
+      check_winner
     unless @game_over 
       player_input
+    else
+      puts "\n Congratulations the winner is #{@winner}"
     end
   end
 
@@ -84,7 +88,7 @@ private
   end
 
   def update_winning_positions(num, marker)
-    @winning_board.each do |array|
+    @winning_combinations.each do |array|
       array.each_with_index do |element, index|
         if element == num 
           array[index] = marker
@@ -93,7 +97,17 @@ private
     end
   end
 
-
+  def check_winner
+    @winning_combinations.each do |array|
+      if array.eql?(@win1) 
+        @winner = @player_one.name
+        @game_over = true
+      elsif array.eql?(@win2)
+        @winner = @player_two.name
+        @game_over = true
+      end
+    end
+  end
 
   def error
     puts "Erroneous input! Try again..."
@@ -107,5 +121,3 @@ player_one = Player.new(gets.chomp, "X")
 puts "Player 2 : Choose your name"
 player_two = Player.new(gets.chomp, "O")
 Game.new(player_one, player_two)
-
-
