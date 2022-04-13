@@ -24,10 +24,9 @@ class Game
   end
 
   def play
-    clear
-    show_board
-    player_input
- 
+      clear
+      show_board
+      player_input
   end
 
   def player_input
@@ -45,10 +44,10 @@ class Game
         if @player_two_input.match?(/[1-9]/)
           update_board(@player_two_input.to_i)
         else
-         error
+          error
         end  
     end
-end
+  end
 
   def show_board
     puts "| #{@board[0]} | #{@board[1]} | #{@board[2]} |  #{@player_one.name} : #{@player_one.marker}"
@@ -57,15 +56,22 @@ end
   end
 
   def update_board(position)
-    p position.class
     if @round.odd? 
-    @board[position - 1] = @player_one.marker
-    @round +=1
-    play
+      if @board[position - 1].match?(/[XO]/)
+        error
+      else
+        @board[position - 1] = @player_one.marker
+        @round +=1
+        play
+      end
     else
-    @board[position - 1] = @player_two.marker
-    @round -=1
-    play
+      if @board[position - 1].match?(/[XO]/)
+        error
+      else
+        @board[position - 1] = @player_two.marker
+        @round -=1
+        play
+      end
     end
   end
 
@@ -73,7 +79,6 @@ end
     puts "Erroneous input! Try again..."
     player_input
   end
-
 end
 
 clear
