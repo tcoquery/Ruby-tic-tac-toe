@@ -16,17 +16,23 @@ class Game
   def initialize(player_one, player_two)
     @player_one=player_one
     @player_two=player_two
-    @player_one_input = nil
-    @player_two_input = nil
     @round = 1
     @board = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    @winning_board = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [7,5,3]]
+    @win1 = ["X", "X", "X"]
+    @win2 = ["O", "O", "O"]
+    @game_over = false
     play
   end
+
+private
 
   def play
       clear
       show_board
+    unless @game_over 
       player_input
+    end
   end
 
   def player_input
@@ -35,6 +41,8 @@ class Game
       @player_one_input=gets.chomp
         if @player_one_input.match?(/[1-9]/)
           update_board(@player_one_input.to_i)
+          update_winning_positions(@player_one_input.to_i, @player_one.marker)
+          play
         else
           error
         end  
@@ -43,6 +51,8 @@ class Game
       @player_two_input=gets.chomp
         if @player_two_input.match?(/[1-9]/)
           update_board(@player_two_input.to_i)
+          update_winning_positions(@player_two_input.to_i, @player_two.marker)
+          play
         else
           error
         end  
@@ -62,7 +72,6 @@ class Game
       else
         @board[position - 1] = @player_one.marker
         @round +=1
-        play
       end
     else
       if @board[position - 1].match?(/[XO]/)
@@ -70,10 +79,21 @@ class Game
       else
         @board[position - 1] = @player_two.marker
         @round -=1
-        play
       end
     end
   end
+
+  def update_winning_positions(num, marker)
+    @winning_board.each do |array|
+      array.each_with_index do |element, index|
+        if element == num 
+          array[index] = marker
+        end
+      end
+    end
+  end
+
+
 
   def error
     puts "Erroneous input! Try again..."
