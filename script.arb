@@ -1,0 +1,71 @@
+def clear
+  puts "\e[H\e[2J"
+end
+
+class Player
+attr_reader :name, :marker
+
+  def initialize(name, marker)
+    @name = name
+    @marker = marker
+    clear
+  end
+end
+
+class Game
+  def initialize(player_one, player_two)
+    @player_one=player_one
+    @player_two=player_two
+    @player_one_input = nil
+    @player_two_input = nil
+    @round = 1
+    @board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    play
+  end
+
+  def play
+    clear
+    show_board
+    player_input
+ 
+  end
+
+  def player_input
+    if @round.odd? 
+    puts "\n #{@player_one.name}, please choose an available position on the board to place your marker"
+    @player_one_input=gets.chomp
+    update_board(@player_one_input.to_i)
+    else
+    puts "\n #{@player_two.name}, please choose an available position on the board to place your marker"
+    @player_two_input=gets.chomp
+    update_board(@player_two_input.to_i)
+   end
+  end
+
+  def show_board
+    puts "| #{@board[0]} | #{@board[1]} | #{@board[2]} |  #{@player_one.name} : #{@player_one.marker}"
+    puts "| #{@board[3]} | #{@board[4]} | #{@board[5]} |  #{@player_two.name} : #{@player_two.marker}"
+    puts "| #{@board[6]} | #{@board[7]} | #{@board[8]} |"
+  end
+
+  def update_board(position)
+    if @round.odd? 
+    @board[position - 1] = @player_one.marker
+    @round +=1
+    play
+    else
+    @board[position - 1] = @player_two.marker
+    @round -=1
+    play
+    end
+  end
+end
+
+clear
+puts "Player 1 : Choose your name"
+player_one = Player.new(gets.chomp, "X")
+puts "Player 2 : Choose your name"
+player_two = Player.new(gets.chomp, "O")
+Game.new(player_one, player_two)
+
+
